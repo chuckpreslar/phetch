@@ -7,6 +7,51 @@ const inits   = ['method', 'mode', 'credentials', 'cache', 'redirect',
 // Common HTTP request methods.
 const methods = ['GET', 'PUT', 'POST', 'PATCH', 'DELETE', 'HEAD'];
 
+/**
+ * Serializes a javascript object into a HTTP querystring.
+ *
+ * @private
+ * @param {String} o - The object to serialize into a querystring.
+ * @returns {String}
+ */
+function serialize (o) {
+  if ('object' !== typeof o) return o;
+
+  const p = [];
+
+  for (const k in o) {
+    generate(p, k, o[k]);
+  }
+
+  return p.join('&');
+}
+
+/**
+ * Method to assist in generate querystrings from javascript objects.
+ *
+ * @private
+ * @param {Array} p - Array used to store paired key values.
+ * @param {String} k - Current key being iterated over via serialize.
+ * @param {*} v - Current value being iterated over via serialize.
+ */
+function generate(p, k, v) {
+  if (Array.isArray(v)) {
+    for (let i = 0, il = v.length; i < il; i++) {
+      generate(p, k, v[i]);
+    }
+
+    return;
+  } else if ('object' === typeof v) {
+    for (const s in v) {
+      generate(p, k + `[${s}]`, v[s]);
+    }
+
+    return;
+  }
+
+  p.push(`${encodeURIComponent(k)}=${encodeURIComponent(v)}`);
+}
+
 class Phetch {
   /**
    * Called when Phetch class is instantiated.
@@ -219,7 +264,7 @@ class Phetch {
    * @returns {String}
    */
   get __querystring() {
-    const s = querystring.encode(this.__query);
+    const s = serialize(this.__query);
     if (0 < s.length) return `?${s}`;
     return '';
   }
