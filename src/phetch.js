@@ -107,6 +107,22 @@ class Phetch {
   }
 
   /**
+   * Alias method to set headers, calling `#headers()` if a single argument is provided
+   * and is an object, or `#header()` if a pair of arguments are provided.
+   *
+   * @public
+   * @param {*} - Investigated to determine which method to call.
+   * @returns {Phetch}
+   */
+  set() {
+    if (1 === arguments.length) {
+      return this.headers(arguments[0]);
+    }
+
+    return this.header(arguments[0], arguments[1]);
+  }
+
+  /**
    * Sets a single querystring parameter to send along with request.
    *
    * @public
@@ -114,19 +130,12 @@ class Phetch {
    * @param {*} value - Value of the querystring parameter to set.
    */
   query(name, value) {
+    if (1 === arguments.length) {
+      return this.__mapped(this.query, arguments[0]);
+    }
+
     this.__query[name] = value;
     return this;
-  }
-
-  /**
-   * Sets multiple querystring parameters to send along with request.
-   *
-   * @public
-   * @param {Object} querys - Map of header names to their values.
-   * @returns {Phetch}
-   */
-  querys(querys) {
-    return this.__mapped(this.header, headers);
   }
 
   /**
@@ -264,6 +273,7 @@ class Phetch {
    * @returns {String}
    */
   get __querystring() {
+    if ('GET' !== this.__method) return '';
     const s = serialize(this.__query);
     if (0 < s.length) return `?${s}`;
     return '';
