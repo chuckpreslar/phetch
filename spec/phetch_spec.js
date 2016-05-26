@@ -169,4 +169,17 @@ describe('phetch', function () {
         .then()).to.eventually.notify(done);
     });
   });
+
+  describe('#__querystring()', function () {
+    let instance;
+
+    before(() => {
+      instance = phetch.get('http.example.com');
+    });
+
+    it('properly encodes querystring', function () {
+      const result = instance.query('foo', 'bar').__querystring;
+      expect(result).to.eq('?foo=bar');
+    });
+  });
 });

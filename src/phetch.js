@@ -1,3 +1,4 @@
+import querystring from 'querystring';
 import fetch from 'isomorphic-fetch';
 
 // Properties to provide values for to a Request's init parameter.
@@ -20,6 +21,7 @@ class Phetch {
 
     this.__method  = method;
     this.__url     = url;
+    this.__query   = new Object();
     this.__headers = new Headers();
   }
 
@@ -56,11 +58,30 @@ class Phetch {
    * @returns {Phetch}
    */
   headers(headers) {
-    for (const header in headers) {
-      this.header(header, headers[header]);
-    }
+    return this.__mapped(this.header, headers);
+  }
 
+  /**
+   * Sets a single querystring parameter to send along with request.
+   *
+   * @public
+   * @param {String} name - Name of the querystring parameter to set.
+   * @param {*} value - Value of the querystring parameter to set.
+   */
+  query(name, value) {
+    this.__query[name] = value;
     return this;
+  }
+
+  /**
+   * Sets multiple querystring parameters to send along with request.
+   *
+   * @public
+   * @param {Object} querys - Map of header names to their values.
+   * @returns {Phetch}
+   */
+  querys(querys) {
+    return this.__mapped(this.header, headers);
   }
 
   /**
@@ -172,7 +193,35 @@ class Phetch {
    * @returns {Promise}
    */
   then(fn) {
-    return fetch(new Request(this.__url, this.__inits)).then(fn);
+    return fetch(new Request(this.__url + this.__querystring, this.__inits)).then(fn);
+  }
+
+  /**
+   * Loops over an object, calling the `fn` argument with each properties name and value.
+   *
+   * @private
+   * @param {Function} fn - The function to provided mapped object data.
+   * @param {Object} obj - The object to loop over.
+   * @returns {Phetch}
+   */
+  __mapped(fn, obj) {
+    for (var property in obj) {
+      fn.call(this, property, obj[property]);
+    }
+
+    return this;
+  }
+
+  /**
+   * Private getter used to format the querystring for the fetch request.
+   *
+   * @private
+   * @returns {String}
+   */
+  get __querystring() {
+    const s = querystring.encode(this.__query);
+    if (0 < s.length) return `?${s}`;
+    return '';
   }
 
   /**
