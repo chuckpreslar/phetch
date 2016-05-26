@@ -22,7 +22,7 @@ A request is initiated by providing the HTTP method and URL to the exported `phe
   const req = phetch('GET', '/api/accounts');
 ```
 
-Or by calling one of the decorated methods (`get`, `put`, `post`, `patch`, `delete`, `header`)
+Or by calling one of the decorated methods (`get`, `put`, `post`, `patch`, `delete`, `head`)
 on the exported `phetch` function with a URL.
 
 ```javascript
