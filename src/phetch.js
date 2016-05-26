@@ -62,6 +62,7 @@ class Phetch {
 
     return this;
   }
+
   /**
    * Sets the mode you want to use for the request, e.g., cors, no-cors, or same-origin.
    *
