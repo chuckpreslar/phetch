@@ -215,7 +215,7 @@ class Phetch {
   }
 
   /**
-   * Sets the body of the request to an instance of FormData based on the Node provided.
+   * Sets the body of the request to an instance of FormData based on the DOM Node provided.
    *
    * @public
    * @param {Node} form - The DOM Node which form data can be collected from.
@@ -227,13 +227,23 @@ class Phetch {
   }
 
   /**
-   * Sets the body of the request to a JSON string.
+   * Sets the body of the request to a JSON string. If a DOM Node node is provided, a JSON
+   * object will be created from its inputs.
    *
    * @public
    * @param {*} json - The value to stringify.
    * @returns {Phetch}
    */
   json(json) {
+    if ('undefined' !== typeof Node && json instanceof Node) {
+      const form = new FormData(json);
+      json = new Object();
+
+      for (const input of form.keys()) {
+        json[input] = form.get(input);
+      }
+    }
+
     this.__body = JSON.stringify(json);
     return this;
   }
