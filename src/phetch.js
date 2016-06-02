@@ -1,3 +1,5 @@
+require('es6-promise').polyfill();
+
 import 'whatwg-fetch';
 import fetch from 'isomorphic-fetch';
 
@@ -239,7 +241,7 @@ class Phetch {
       const form = new FormData(json);
       const obj  = new Object();
 
-      if ('undefined' !== typeof form.keys) {
+      if ('function' === typeof form.keys) {
         for (const input of form.keys()) {
           obj[input] = form.get(input);
         }

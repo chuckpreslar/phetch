@@ -1,6 +1,6 @@
 {
   "name": "phetch",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Chainable wrapper for isomorphic fetch.",
   "main": "./lib/phetch.js",
   "scripts": {
@@ -22,6 +22,7 @@
   "author": "Chuck Preslar <chuck@skookum.com>",
   "license": "MIT",
   "dependencies": {
+    "es6-promise": "^3.2.1",
     "isomorphic-fetch": "^2.2.1",
     "whatwg-fetch": "^1.0.0"
   },
