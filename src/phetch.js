@@ -239,8 +239,12 @@ class Phetch {
       const form = new FormData(json);
       json = new Object();
 
-      for (const input of form.keys()) {
-        json[input] = form.get(input);
+      if ('undefined' !== typeof form.keys) {
+        for (const input of form.keys()) {
+          json[input] = form.get(input);
+        }
+      } else {
+        this.__json(json, event.target.querySelectorAll('input'));
       }
     }
 
@@ -274,6 +278,19 @@ class Phetch {
     }
 
     return this;
+  }
+
+  /**
+   * Attempt to polyfil FormData.keys().
+   *
+   * @private
+   * @param {Object} obj - The object to store name/value pairs within.
+   * @param {[]Node} inputs - Form inputs to pull name/value pairs from.
+   */
+  __json(obj, inputs) {
+    for (let i = 0, il = inputs.length; i < il; i++) {
+      object[inputs[i].name] = inputs[i].value;
+    }
   }
 
   /**
