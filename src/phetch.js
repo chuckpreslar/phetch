@@ -1,4 +1,4 @@
-import querystring from 'querystring';
+import 'whatwg-fetch';
 import fetch from 'isomorphic-fetch';
 
 // Properties to provide values for to a Request's init parameter.

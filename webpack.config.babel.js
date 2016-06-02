@@ -38,6 +38,7 @@ export default {
   },
 
   entry: [
+    'whatwg-fetch',
     './src/phetch',
   ],
 
