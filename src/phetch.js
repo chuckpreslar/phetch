@@ -237,14 +237,14 @@ class Phetch {
   json(json) {
     if ('undefined' !== typeof Node && json instanceof Node) {
       const form = new FormData(json);
-      json = new Object();
+      const obj  = new Object();
 
       if ('undefined' !== typeof form.keys) {
         for (const input of form.keys()) {
-          json[input] = form.get(input);
+          obj[input] = form.get(input);
         }
       } else {
-        this.__json(json, event.target.querySelectorAll('input'));
+        this.__json(obj, json.querySelectorAll('input'));
       }
     }
 
@@ -289,7 +289,7 @@ class Phetch {
    */
   __json(obj, inputs) {
     for (let i = 0, il = inputs.length; i < il; i++) {
-      object[inputs[i].name] = inputs[i].value;
+      obj[inputs[i].name] = inputs[i].value;
     }
   }
 
