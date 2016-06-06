@@ -1,7 +1,5 @@
 require('es6-promise').polyfill();
-
-import 'whatwg-fetch';
-import fetch from 'isomorphic-fetch';
+require('isomorphic-fetch');
 
 // Properties to provide values for to a Request's init parameter.
 const inits   = ['method', 'mode', 'credentials', 'cache', 'redirect',
@@ -85,43 +83,26 @@ class Phetch {
   }
 
   /**
-   * Sets a single header to send along with request.
+   * If a single argument is provided and is typeof `object`, the argument
+   * will be iterated over as a hash of key/values representing headers.
+   * If two or more arguments are provided, the first argument will be
+   * used as the header name, while remaining arguments joined and supplied
+   * as its value.
    *
    * @public
-   * @param {String} name - Name of the header to set.
-   * @param {*} value - Value to pair with header name.
-   * @returns {Phetch}
-   */
-  header(name, value) {
-    this.__headers.set(name, value);
-    return this;
-  }
-
-  /**
-   * Sets multiple headers to send along with request.
-   *
-   * @public
-   * @param {Object} headers - Map of header names to their values.
-   * @returns {Phetch}
-   */
-  headers(headers) {
-    return this.__mapped(this.header, headers);
-  }
-
-  /**
-   * Alias method to set headers, calling `#headers()` if a single argument is provided
-   * and is an object, or `#header()` if a pair of arguments are provided.
-   *
-   * @public
-   * @param {*} - Investigated to determine which method to call.
+   * @param {*} - Investigated to determine how method set header(s).
    * @returns {Phetch}
    */
   set() {
     if (1 === arguments.length) {
-      return this.headers(arguments[0]);
+      return this.__mapped(this.set, arguments[0]);
     }
 
-    return this.header(arguments[0], arguments[1]);
+    const header = arguments[0];
+    const value  = Array.prototype.slice.call(arguments, 0).splice(1).join(',');
+
+    this.__headers.set(header, value);
+    return this;
   }
 
   /**
@@ -238,7 +219,8 @@ class Phetch {
    */
   json(json) {
     if ('undefined' !== typeof Node && json instanceof Node) {
-      const form = new FormData(json);
+      const node = json;
+      const form = new FormData(node);
       const obj  = new Object();
 
       if ('function' === typeof form.keys) {
@@ -246,7 +228,7 @@ class Phetch {
           obj[input] = form.get(input);
         }
       } else {
-        this.__json(obj, json.querySelectorAll('input'));
+        this.__json(obj, node.querySelectorAll('input'));
       }
     }
 
@@ -256,14 +238,23 @@ class Phetch {
 
   /**
    * Crafts a Request instance to provide to fetch, returning its Promise
-   * after supplying the `fn` function argument to `#then()`.
+   *
+   * @public
+   * @returns {Promise}
+   */
+  promise() {
+    return fetch(new Request(this.__url + this.__querystring, this.__inits));
+  }
+
+  /**
+   * Creates the `fetch` Promise, supplying the `fn` argument to its `then` method.
    *
    * @public
    * @param {Function} fn - The function to provide as the first `#then()` callback.
    * @returns {Promise}
    */
   then(fn) {
-    return fetch(new Request(this.__url + this.__querystring, this.__inits)).then(fn);
+    return this.promise().then(fn);
   }
 
   /**

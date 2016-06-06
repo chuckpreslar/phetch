@@ -107,7 +107,7 @@ describe('phetch', function () {
   });
 
 
-  describe('#header()', function () {
+  describe('#set()', function () {
     let instance, headers;
 
     before(() => {
@@ -115,7 +115,7 @@ describe('phetch', function () {
       headers  = new Headers();
       instance.__headers = headers;
 
-      instance.header('content-type', 'application/json');
+      instance.set('content-type', 'application/json');
     });
 
     it('sets single header correctly', function () {
@@ -123,7 +123,7 @@ describe('phetch', function () {
     });
   });
 
-  describe('#headers()', function () {
+  describe('#set()', function () {
     let instance, headers;
 
     before(() => {
@@ -131,7 +131,7 @@ describe('phetch', function () {
       headers  = new Headers();
       instance.__headers = headers;
 
-      instance.headers({ 'content-type': 'application/json', 'authentication': 'bearer' });
+      instance.set({ 'content-type': 'application/json', 'authentication': 'bearer' });
     });
 
     it('sets multiple headers correctly', function () {
@@ -165,8 +165,8 @@ describe('phetch', function () {
 
     it('executes request', function (done) {
       expect(phetch.get('http://www.example.com')
-        .header('content-type', 'application/json')
-        .then()).to.eventually.notify(done);
+        .set('content-type', 'application/json')
+        .promise()).to.eventually.notify(done);
     });
   });
 
