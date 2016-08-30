@@ -205,7 +205,12 @@ class Phetch {
    * @returns {Phetch}
    */
   form(form) {
-    this.__body = new FormData(form);
+    if (form instanceof FormData) {
+      this.__body = form;
+    } else {
+      this.__body = new FormData(form);
+    }
+
     return this;
   }
 

@@ -1,6 +1,6 @@
 {
   "name": "phetch",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Chainable wrapper for isomorphic fetch.",
   "main": "./lib/phetch.js",
   "scripts": {
