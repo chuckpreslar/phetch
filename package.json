@@ -1,0 +1,32 @@
+{
+  "name": "phetch",
+  "version": "0.2.0",
+  "description": "Isomorphic fetch wrapper.",
+  "main": "lib/phetch.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chuckpreslar/phetch.git"
+  },
+  "author": "Chuck Preslar <chuckpreslar@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chuckpreslar/phetch/issues"
+  },
+  "homepage": "https://github.com/chuckpreslar/phetch#readme",
+  "dependencies": {
+    "isomorphic-fetch": "^2.2.1"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-async-to-generator": "^6.16.0",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-polyfill": "^6.16.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-stage-0": "^6.16.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^6.1.2",
+    "jest": "^17.0.3"
+  }
+}
